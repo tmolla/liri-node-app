@@ -19,10 +19,10 @@ function filter(array) {
 
 //This function logs the message to both the console and a text file txt.log
 function writeMessage(message){
-	/*console.log(message);
+	console.log(message);
 	fs.appendFile("log.txt",message,function(err){
 		if (err) throw err;
-	});*/
+	});
 }
 
 //function to process the command
@@ -35,7 +35,6 @@ function processCommand(command, subject){
 				.then(
 					function (response) {
 						var bandsintownData = response.data
-						console.log(bandsintownData)
 						for (var i = 0; i < bandsintownData.length; i++){
 							var message = "\n----------------------------------- Bands in Town -----------------------------------\n" + 
 										"Name of the venue: " + bandsintownData[i].venue.name + "\n" + 
@@ -53,7 +52,6 @@ function processCommand(command, subject){
 			var track = subject;
 			spotify.search({ type: 'track', query: track })
 					.then(function(response) {
-						console.log(response.tracks.items[i].album)
 						for (var i = 0; i<response.tracks.items.length; i++){
 							var message = "\n------------------------------------ Spotify Song ----------------------------------\n" + 
 										"Artist(s) " + filter(response.tracks.items[i].album.artists).join(' ') + "\n" +
@@ -97,8 +95,7 @@ function processCommand(command, subject){
 			break;
 		case "do-what-it-says":
 			fs.readFile("random.txt", "utf8", function(err, data){
-				var arr = data.trim().split("\n"); //data.trim().split(",");
-				//console.log(arr)
+				var arr = data.trim().split("\n"); 
 				for (var i=0; i<arr.length; i++){
 					x = arr[i].split(",");
 					processCommand(x[0].trim(), x[1].split(" ").join("+"))
@@ -106,8 +103,8 @@ function processCommand(command, subject){
 			})
 			break;
 		default:
-			console.log("Unknown command ")
-			console.log(command)
+			var message = "Unknown command '" + command + "' submitted.\n";
+			writeMessage(message);
 			break;
 	};
 }
